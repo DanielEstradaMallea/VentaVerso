@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="es">
+{% load static %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>VentaVerso Online - Sistemas TPV</title>
+
+    <!-- Bootstrap CSS y Font Awesome -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+    <!-- Estilos Personalizados -->
+    <style>
+        body {
+            background-color: #2568aa;
+            /* Color de fondo */
+        }
+
+        .navbar {
+            background-color: #848ea8;
+            /* Color de fondo de la barra de navegación */
+        }
+
+        .navbar-brand {
+            color: #ffffff !important;
+            /* Color del texto del logo */
+        }
+
+        .navbar-toggler-icon {
+            background-color: #1b0202;
+            /* Color del ícono del botón de navegación en dispositivos pequeños */
+        }
+
+        .navbar-nav .nav-link {
+            color: rgb(255, 252, 248) !important;
+            /* Color del texto de los enlaces en la barra de navegación */
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: #fd7e14 !important;
+            /* Color del texto de los enlaces al pasar el mouse */
+        }
+
+        .container {
+            background-color: #ffffff;
+            /* Color de fondo del contenido de la página */
+            border-radius: 8px;
+            /* Bordes redondeados del contenido */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            /* Sombra ligera */
+            padding: 20px;
+            /* Espaciado interno del contenido */
+            margin-top: 20px;
+            /* Espaciado superior del contenido */
+        }
+
+        h1 {
+            color: #343a40;
+            /* Color del título principal */
+        }
+
+        p {
+            color: #495057;
+            /* Color del texto del contenido */
+        }
+
+        .card {
+            border: none;
+            /* Sin borde */
+            border-radius: 8px;
+            /* Bordes redondeados */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            /* Sombra ligera */
+        }
+
+        .card-img-top {
+            border-radius: 8px 8px 0 0;
+            /* Bordes redondeados solo en la parte superior */
+        }
+
+        .card-title {
+            color: #343a40;
+            /* Color del título de la tarjeta */
+        }
+
+        .card-text {
+            color: #495057;
+            /* Color del texto de la tarjeta */
+        }
+
+        .card-link {
+            color: #fd7e14;
+            /* Color del enlace de la tarjeta */
+        }
+
+        .card-link:hover {
+            color: #343a40;
+            /* Color del enlace de la tarjeta al pasar el mouse */
+        }
+
+        .btn-warning {
+            color: #ffffff;
+            /* Color del texto del botón */
+            background-color: #fd7e14;
+            /* Color de fondo del botón */
+            border-color: #fd7e14;
+            /* Color del borde del botón */
+        }
+
+        .btn-warning:hover {
+            color: #ffffff;
+            /* Color del texto del botón al pasar el mouse */
+            background-color: #fca311;
+            /* Color de fondo del botón al pasar el mouse */
+            border-color: #fca311;
+            /* Color del borde del botón al pasar el mouse */
+        }
+
+        .footer {
+            background-color: #343a40;
+            /* Color de fondo del pie de página */
+            color: #ffffff;
+            /* Color del texto del pie de página */
+            padding: 20px;
+            /* Espaciado interno del pie de página */
+        }
+
+        .footer a {
+            color: #ffffff;
+            /* Color de los enlaces del pie de página */
+        }
+
+        .footer a:hover {
+            color: #fd7e14;
+            /* Color de los enlaces del pie de página al pasar el mouse */
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Barra de navegación -->
+    <nav class="navbar navbar-expand-lg">
+        <a class="navbar-brand" href=""><i class="fas fa-home"></i> VentaVerso Online</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'home' %}">Quiénes Somos</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'home' %}">Registrate</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav ml-auto">
+                {% if request.user.is_authenticated %}
+                <li class="nav-item">
+                   
+
+                    <a class="nav-link btn btn-warning" href="{% url 'cuerpoventa' %}">
+                        <i class="fas fa-sign-in-alt"></i> Entrar
+                    </a>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link btn btn-warning" href="{% url 'login' %}">
+                        <i class="fas fa-sign-in-alt"></i> INGRESAR
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+
+    
+
+    <!-- Contenido de la página -->
+    <div class="container mt-4">
+        <h1>Bienvenido a VentaVerso Online</h1>
+        <p>VentaVerso Online es una plataforma de sistemas TPV que te permite gestionar tu negocio de forma fácil,
+            rápida y segura. Con VentaVerso Online podrás:</p>
+        <ul>
+            <li>Registrar tus ventas y compras</li>
+            <li>Controlar tu inventario y stock</li>
+            <li>Emitir facturas y boletas electrónicas</li>
+            <li>Generar reportes e informes</li>
+            <li>Acceder desde cualquier dispositivo y lugar</li>
+        </ul>
+        <p>Además, VentaVerso Online te ofrece una gran variedad de opciones de personalización, integración y soporte
+            técnico. Todo esto con un precio accesible y sin contratos ni permanencias.</p>
+        <p>¿Qué esperas para probar VentaVerso Online? Regístrate ahora y obtén un mes gratis de prueba. ¡No te
+            arrepentirás!</p>
+        
+    </div>
+    
+
+  {% block content %}{% endblock %}
+
+</body>

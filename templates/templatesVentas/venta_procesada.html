@@ -1,0 +1,81 @@
+{% extends 'templatesVentas/venta.html' %}
+
+{% block content %}
+
+<style>
+  @media print {
+    body * {
+      visibility: hidden;
+    }
+    .shoppingCart, .shoppingCart * {
+      visibility: visible;
+    }
+    .shoppingCart {
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+
+    /* Ajustes para impresoras de 58mm */
+    .table {
+      width: 100%;
+    }
+
+    .cart-payment-section {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* Ajustes de fuente y estilos según necesidades */
+    body, td {
+      font-size: 10px;
+    }
+
+    h2, h3 {
+      font-size: 12px;
+    }
+  }
+</style>
+
+<div class="venta-detalle-container mt-5">
+  <div class="shoppingCart">
+    <h2 class="mb-4">Venta Procesada</h2>
+
+    <p>¡Gracias por tu compra!</p>
+
+    <p>Detalle de la venta:</p>
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Producto</th>
+          <th scope="col">Cant.</th>
+          <th scope="col">Precio Uni.</th>
+          <th scope="col">Subtotal</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in sale.saleitem_set.all %}
+        <tr>
+          <td>{{ item.product.name }}</td>
+          <td>{{ item.quantity }}</td>
+          <td>${{ item.price }}</td>
+          <td>${{ item.subtotal }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <div class="cart-payment-section">
+      <h3>Total: ${{ sale.total_price }}</h3>
+
+      <a class="btn btn-primary" href="{% url 'cuerpoventa' %}">Volver a la Tienda</a>
+      
+      <button class="btn btn-success" onclick="window.print()">Imprimir</button>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}

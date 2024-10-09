@@ -1,0 +1,86 @@
+{% block content%}
+
+{% load crispy_forms_tags %}
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>VentaVerso Online - Sistemas TPV</title>
+
+<!-- Bootstrap CSS y Font Awesome -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+
+<!-- Estilos adicionales que he generado para mejorar el diseño -->
+
+<style>
+    
+    body {
+            background-color: #2568aa;
+            /* Color de fondo */
+        }
+    
+    .card {
+        border: none;
+        /* Eliminación del borde de la tarjeta */
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        /* Sombra ligera de la tarjeta */
+    }
+
+    .card-title {
+        color: #343a40;
+        /* Color del título de la tarjeta */
+    }
+
+    .card-text {
+        color: #495057;
+        /* Color del texto de la tarjeta */
+    }
+
+    .card-link {
+        color: #fd7e14;
+        /* Color del enlace de la tarjeta */
+    }
+
+    .card-link:hover {
+        color: #343a40;
+        /* Color del enlace al pasar el mouse */
+    }
+
+    .btn-primary {
+        background-color: #fd7e14;
+        /* Color de fondo del botón */
+        border: none;
+        /* Eliminación del borde del botón */
+    }
+
+    .btn-primary:hover {
+        background-color: #343a40;
+        /* Color de fondo del botón al pasar el mouse */
+    }
+</style>
+
+<!-- Tarjeta con el formulario de registro de usuario -->
+<br>
+
+<div class="card p-4 mx-auto" style="width: 40rem;">
+    <h3 class="card-title text-center mb-4">Registro de usuario</h3>
+    <p class="card-text">Para crear una cuenta en VentaVerso Online, por favor complete el siguiente formulario con sus
+        datos personales y de contacto.</p>
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ form | crispy }}
+        <button type="submit" class="btn btn-primary btn-block">Registrarse</button>
+        <p class="card-text text-center mt-4">¿Ya tienes una cuenta? <a href="{% url 'login' %}"
+                class="card-link">Inicia sesión</a></p>
+    </form>
+</div>
+<br>
+<!-- Scripts de Bootstrap y jQuery al final del cuerpo para mejorar el rendimiento de carga -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"
+    integrity="sha384-rdcsWBHyIaJIHAqeDNV9zHHRtMz9FmMSFvLKBymzByAuFOe8meMw1T2Qyo2FpHs6"
+    crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+{% endblock %}

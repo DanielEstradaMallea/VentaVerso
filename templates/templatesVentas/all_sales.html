@@ -1,0 +1,38 @@
+{% extends 'templatesVentas/venta.html' %}
+
+{% block content %}
+
+<div class="container mt-5">
+
+  <div class="container">
+    
+  </div>
+
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Numero de recibo</th>
+        <th scope="col">Fecha de Venta</th>
+        <th scope="col">Total</th>
+        <th scope="col"></th>
+        <!-- Agrega otras columnas según tus necesidades -->
+      </tr>
+    </thead>
+    <tbody>
+      {% for sale in sales %}
+      <tr>
+        <td>{{sale.recibo_numero}}</td>
+        <td>{{ sale.created_at }}</td>
+        <td>${{ sale.total_price }}</td>
+        <td><a href="{% url 'ver_venta' sale.id %}" class="btn btn-success">Ver</a></td>
+        <!-- Agrega otras celdas según tus necesidades -->
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  
+</div>
+
+{% endblock content %}

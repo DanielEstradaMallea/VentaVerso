@@ -1,0 +1,58 @@
+{% extends "templatesVentas/venta.html" %}
+
+{% load static %}
+
+{% block content %}
+<div class="container py-5">
+    <br>    
+    <h2>Lista de Articulos</h2><a href="{% url 'agregar_articulo'%}" class="btn btn-success m-3"><img
+        src="{% static 'images/add-icon.png' %}" alt="Agregar"> Nuevo Articulo</a>  
+
+    <!-- Buscador de productos -->
+    <div class="container input-group mb-3">
+        <input type="text" class="form-control" placeholder="Buscar producto..."name="buscararticulo"  id="search-input">
+        <div class="input-group-append">
+            <button class="btn btn-outline-secondary" type="button" id="search-button">
+                <i class="fas fa-search"></i>
+            </button>
+        </div>
+    </div>
+    <br>
+
+    <!-- Tabla de artículos -->
+    <table class="table table-striped">
+        <thead class="thead-dark">
+            <tr>
+                <th>Nombre del Artículo</th>
+                <th>Categoría</th>
+                <th>Precio</th>
+                <th>Stock</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for articulo in articulos %}
+            <tr>
+                <td>{{ articulo.name }}</td>
+                <td>{{ articulo.categoria }}</td>
+                <td>{{ articulo.price }}</td>
+                <td>{{ articulo.stock }}</td>
+                <td>
+                    <a href="{% url 'actualizar_articulo' articulo.id %}" class="btn btn-info btn-sm">
+                        <img src="{% static 'images/edit-icon.png' %}" alt="Editar">
+                    </a>
+                </td>
+                <td>
+                    <a href="{% url 'eliminar_articulo' articulo.id %}" class="btn btn-danger btn-sm"
+                        onclick="return confirm('¿Estás seguro de que deseas eliminar a {{ articulo.name }}?')">
+                        <img src="{% static 'images/delete-icon.png' %}" alt="Eliminar">
+                    </a>
+                </td>
+                
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

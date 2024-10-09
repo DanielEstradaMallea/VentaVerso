@@ -1,0 +1,64 @@
+{% extends "templatesVentas/venta.html" %}
+
+{% load static %}
+
+{% block content %}
+<div class="container py-5">
+    <br>
+    <h2>Lista de Clientes</h2><a href="{% url 'agregar_cliente'%}" class="btn btn-success m-3"><img
+        src="{% static 'images/add-icon.png' %}" alt="Agregar"> Nuevo Cliente</a>  
+    
+
+    <!-- Buscador de productos -->
+    <div class="container input-group mb-3">
+        <input type="text" class="form-control" placeholder="Buscar cliente..."name="buscararticulo"  id="search-input">
+        <div class="input-group-append">
+            <button class="btn btn-outline-secondary" type="button" id="search-button">
+                <i class="fas fa-search"></i>
+            </button>
+        </div>
+    </div>
+    <br>
+
+    <!-- Tabla de artículos -->
+    <table class="table table-striped">
+        <thead class="thead-dark">
+            <tr>
+                <th>Nombre</th>
+                <th>Apellidos</th>
+                <th>Direccion</th>
+                <th>Telefono</th>
+                <th>Correo electrónico</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for cliente in clientes %}
+            <tr>
+                <td>{{ cliente.nombre }}</td>
+                <td>{{ cliente.apellidos }}</td>
+                <td>{{ cliente.direccion }}</td>
+                <td>{{ cliente.telefono }}</td>
+                <td>{{ cliente.correo }}</td>
+                <td>
+                    <a href="{% url 'actualizar_cliente' cliente.id %}" class="btn btn-info btn-sm">
+                        <img src="{% static 'images/edit-icon.png' %}" alt="Editar">
+                    </a>
+                </td>
+                <td>
+                    <a href="{% url 'eliminar_cliente' cliente.id %}" class="btn btn-danger btn-sm"
+                        onclick="return confirm('¿Estás seguro de que deseas eliminar a {{ cliente.nombre }} {{ cliente.apellidos }}?')">
+                        <img src="{% static 'images/delete-icon.png' %}" alt="Editar">
+                    </a>
+                </td>
+
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+
+
+

@@ -1,0 +1,40 @@
+{% extends "templatesVentas/venta.html" %}
+
+
+{% block content %}
+
+<head>
+    <link rel="stylesheet" href="/static/css/menu.css">
+</head>
+
+
+<div class="container">
+
+    {% for product in products %}
+
+    <div class="productContainer">
+
+        <div class="action">
+
+            {% if product.imagen %}
+            <img src="{{ product.imagen.url }}" alt="{{ product.title }}" class="product-image" style="width: 150px; height: cover;">
+            {% endif %}
+
+            
+            <p>{{product.name}}</p>
+
+            <p>${{product.price}}</p>
+
+            <button value="{{product.id}}">Agregar</button>
+
+        </div>
+
+
+    </div>
+
+    {% endfor %}
+
+
+</div>
+
+{% endblock content %}

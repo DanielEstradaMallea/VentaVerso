@@ -1,0 +1,131 @@
+{% extends 'templatesVentas/venta.html' %}
+
+{% block content %}
+
+{% load static %}
+
+<style>
+    /* Estilo de la boleta */
+    .receipt {
+        max-width: 400px;
+        margin: 0 auto;
+        padding: 20px;
+        border: 1px dashed #000;
+        background-color: #f9f9f9;
+        font-family: 'Courier New', Courier, monospace; /* Fuente monoespaciada para estilo de recibo */
+        font-size: 14px;
+    }
+
+    .receipt-header {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .receipt-header h2 {
+        margin: 0;
+        font-size: 20px;
+    }
+
+    .receipt-details, .receipt-total {
+        margin-bottom: 20px;
+    }
+
+    .receipt-details p, .receipt-total p {
+        margin: 5px 0;
+    }
+
+    .receipt-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .receipt-table th, .receipt-table td {
+        border-bottom: 1px solid #000;
+        padding: 5px;
+        text-align: left;
+    }
+
+    .receipt-table th {
+        font-weight: bold;
+    }
+
+    .receipt-footer {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    /* Botón de impresión */
+    .print-button {
+        position: absolute;
+        top: 0;
+        right: 0;
+        background: none;
+        border: none;
+    }
+
+    .print-button img {
+        width: 30px;
+        height: 30px;
+    }
+
+    /* Ajustes para impresión */
+    @media print {
+        .print-button {
+            display: none;
+        }
+
+        .receipt {
+            border: none;
+        }
+    }
+</style>
+
+<div class="venta-detalle-container mt-5">
+    <button onclick="window.print();" class="btn btn-success print-button"><img src="{% static 'images/printer-icon.png'%}" alt="Imprimir"></button>
+
+    <div class="receipt">
+        <div class="receipt-header">
+            <h2>Detalles de la Venta</h2>
+            <p><strong>Número de Recibo:</strong> {{ sale.recibo_numero }}</p>
+            <p><strong>Fecha:</strong> {{ sale.created_at|date:"d-m-Y" }}</p>
+        </div>
+
+        <div class="receipt-details">
+            <p><strong>Cliente:</strong> {{ sale.cliente.nombre }}</p>
+            <p><strong>Vendedor:</strong> {{ sale.vendedor.nombre }}</p>
+        </div>
+
+        <table class="receipt-table">
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Cant.</th>
+                    <th>Precio</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in sale.saleitem_set.all %}
+                <tr>
+                    <td>{{ item.product.name }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>${{ item.price }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="receipt-total">
+            <p><strong>Total a Pagar:</strong> ${{ sale.total_price }}</p>
+        </div>
+
+        <div class="receipt-footer">
+            <p>Gracias por su compra!</p>
+        </div>
+    </div>
+
+    <div style="display: flex; justify-content: center; margin-top: 20px;">
+        <a href="{% url 'all_sales'%}" class="btn btn-info">Volver</a>
+    </div>
+</div>
+
+{% endblock content %}

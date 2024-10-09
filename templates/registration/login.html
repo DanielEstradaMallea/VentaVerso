@@ -1,0 +1,166 @@
+{% block content%}
+
+{% load crispy_forms_tags %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>VentaVerso Online - Sistemas TPV</title>
+
+    <!-- Bootstrap CSS y Font Awesome -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+    <!-- Estilos Personalizados -->
+    <style>
+        body {
+            background-color: #2568aa;
+            /* Color de fondo */
+        }
+
+        .navbar {
+            background-color: #343a40;
+            /* Color de fondo de la barra de navegación */
+        }
+
+        .navbar-brand {
+            color: #b14242 !important;
+            /* Color del texto del logo */
+        }
+
+        .navbar-toggler-icon {
+            background-color: #1b0202;
+            /* Color del ícono del botón de navegación en dispositivos pequeños */
+        }
+
+        .navbar-nav .nav-link {
+            color: #ffffff !important;
+            /* Color del texto de los enlaces en la barra de navegación */
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: #fd7e14 !important;
+            /* Color del texto de los enlaces al pasar el mouse */
+        }
+
+        .container {
+            background-color: #ffffff;
+            /* Color de fondo del contenido de la página */
+            border-radius: 8px;
+            /* Bordes redondeados del contenido */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            /* Sombra ligera */
+            padding: 20px;
+            /* Espaciado interno del contenido */
+            margin-top: 20px;
+            /* Espaciado superior del contenido */
+        }
+
+        h1 {
+            color: #343a40;
+            /* Color del título principal */
+        }
+
+        p {
+            color: #495057;
+            /* Color del texto del contenido */
+        }
+
+        .card {
+            border: none;
+            /* Sin borde */
+            border-radius: 8px;
+            /* Bordes redondeados */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            /* Sombra ligera */
+        }
+
+        .card-img-top {
+            border-radius: 8px 8px 0 0;
+            /* Bordes redondeados solo en la parte superior */
+        }
+
+        .card-title {
+            color: #343a40;
+            /* Color del título de la tarjeta */
+        }
+
+        .card-text {
+            color: #495057;
+            /* Color del texto de la tarjeta */
+        }
+
+        .card-link {
+            color: #fd7e14;
+            /* Color del enlace de la tarjeta */
+        }
+
+        .card-link:hover {
+            color: #343a40;
+            /* Color del enlace de la tarjeta al pasar el mouse */
+        }
+
+        .btn-warning {
+            color: #ffffff;
+            /* Color del texto del botón */
+            background-color: #fd7e14;
+            /* Color de fondo del botón */
+            border-color: #fd7e14;
+            /* Color del borde del botón */
+        }
+
+        .btn-warning:hover {
+            color: #ffffff;
+            /* Color del texto del botón al pasar el mouse */
+            background-color: #fca311;
+            /* Color de fondo del botón al pasar el mouse */
+            border-color: #fca311;
+            /* Color del borde del botón al pasar el mouse */
+        }
+
+        .footer {
+            background-color: #343a40;
+            /* Color de fondo del pie de página */
+            color: #ffffff;
+            /* Color del texto del pie de página */
+            padding: 20px;
+            /* Espaciado interno del pie de página */
+        }
+
+        .footer a {
+            color: #ffffff;
+            /* Color de los enlaces del pie de página */
+        }
+
+        .footer a:hover {
+            color: #fd7e14;
+            /* Color de los enlaces del pie de página al pasar el mouse */
+        }
+    </style>
+</head>
+
+
+
+<br>
+<br>
+<div class="card p-4 mx-auto" style="width: 40rem;">
+    <h3 class="card-title text-center mb-4">Ingrese sus credenciales</h3>
+    <p class="card-text">Para acceder a los servicios de VentaVerso Online, por favor ingrese su nombre de usuario y
+        contraseña.</p>
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ form | crispy }}
+        <button type="submit" class="btn btn-primary btn-block">Iniciar Sesión</button>
+        <p class="card-text text-center mt-4">¿No tienes una cuenta? <a href="{% url 'register' %}"
+                class="card-link">Regístrate</a></p>
+    </form>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"
+    integrity="sha384-rdcsWBHyIaJIHAqeDNV9zHHRtMz9FmMSFvLKBymzByAuFOe8meMw1T2Qyo2FpHs6"
+    crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+{% endblock %}

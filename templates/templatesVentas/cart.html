@@ -1,0 +1,261 @@
+{% extends 'templatesVentas/venta.html' %}
+
+{% load static %}
+
+<head>
+  <!-- Agrega enlaces a tus archivos CSS y Bootstrap si los tienes -->
+  <link rel="stylesheet" type="text/css" href="{% static 'css/estilos_carrito.css' %}">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+{% block content %}
+
+<body>
+  <style>
+    .cart-payment-section {
+      margin-top: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    #notification {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      padding: 10px;
+      border-radius: 5px;
+      display: none;
+    }
+
+    .success {
+      background-color: #4CAF50;
+      color: white;
+    }
+
+    .error {
+      background-color: #f44336;
+      color: white;
+    }
+
+    .quantity-btn {
+      margin-right: 5px;
+    }
+
+    .cart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .back-btn {
+      margin-right: 20px;
+    }
+
+    .clear-cart-btn {
+      margin-left: 20px;
+    }
+
+    .pay-btn {
+      width: 100%;
+    }
+
+    .delete-btn {
+      background-color: #f44336;
+      color: white;
+      border: none;
+    }
+
+    .add-btn {
+
+      color: white;
+      border: none;
+    }
+  </style>
+
+  <div class="venta-detalle-container mt-5">
+    <div class="shoppingCart">
+      <div class="cart-header">
+        <a class="btn btn-primary back-btn" href="{% url 'cuerpoventa' %}">
+          <span aria-hidden="true">&larr;</span> Volver
+        </a>
+        <h2 class="mb-4">Carrito de Compras</h2>
+        <a class="btn btn-warning clear-cart-btn" href="{% url 'clear_cart' %}">
+          Vaciar Carrito
+        </a>
+      </div>
+
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Producto</th>
+            <th scope="col">Cantidad</th>
+            <th scope="col">Precio Unitario</th>
+            <th scope="col">Subtotal</th>
+            <th scope="col">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in items %}
+          <tr id="cart-item-{{ item.id }}">
+            <td>{{ item.product.name }}</td>
+            <td>
+              <div class="btn-group" role="group" aria-label="Cantidad">
+                <button type="button" class="btn btn-secondary quantity-btn add-btn" data-action="decrease"
+                  data-item-id="{{ item.id }}">-</button>
+                <span id="quantity-{{ item.id }}" class="btn btn-light"
+                  style="pointer-events: none;">{{item.quantity}}</span>
+                <button type="button" class="btn btn-secondary quantity-btn add-btn" data-action="increase"
+                  data-item-id="{{ item.id }}">+</button>
+              </div>
+            </td>
+            <td>${{ item.product.price }}</td>
+            <td id="subtotal-{{ item.id }}">${{ item.price }}</td>
+            <td>
+              <button class="btn btn-danger delete-btn" data-item-id="{{ item.id }}">X</button>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <div class="cart-payment-section">
+        <h3>Total: ${{ cart.total_price }}</h3>
+      </div>
+
+      <form method="post" action="{% url 'process_sale' %}">
+        {% csrf_token %}
+        <input type="hidden" name="empleado" id="empleadoId">
+        <button type="submit" class="btn btn-success pay-btn">Pagar</button>
+      </form>
+    </div>
+
+    <div id="notification"></div>
+    <script>
+      // script.js
+
+      document.querySelectorAll(".quantity-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const itemId = btn.dataset.itemId;
+          const action = btn.dataset.action;
+
+          if (action === "increase") {
+            editCartItem(itemId, parseInt(document.getElementById(`quantity-${itemId}`).textContent) + 1);
+          } else if (action === "decrease") {
+            const currentQuantity = parseInt(document.getElementById(`quantity-${itemId}`).textContent);
+            if (currentQuantity > 1) {
+              editCartItem(itemId, currentQuantity - 1);
+            }
+          }
+        });
+      });
+
+      document.querySelectorAll(".delete-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const itemId = btn.dataset.itemId;
+          deleteCartItem(itemId);
+        });
+      });
+
+      function editCartItem(itemId, newQuantity) {
+        let url = `/edit_cart_item/${itemId}/${newQuantity}/`;
+
+        fetch(url, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", 'X-CSRFToken': csrftoken },
+        })
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
+              if (newQuantity === 0) {
+                // Si la nueva cantidad es 0, elimina el artículo del carrito
+                removeCartItemUI(itemId);
+              } else {
+                // Actualiza la interfaz gráfica
+                updateCartItemUI(itemId, newQuantity, data.subtotal);
+              }
+
+              // Muestra la notificación y actualiza el total del carrito
+              showNotification("Elemento del carrito editado correctamente.", true, data.total_price);
+            } else {
+              showNotification("Error al editar el elemento del carrito.", false);
+            }
+          })
+          .catch(error => {
+            showNotification("Error de red al editar el elemento del carrito.", false);
+          });
+      }
+
+
+      function deleteCartItem(itemId) {
+        let url = `/delete_cart_item/${itemId}/`;
+
+        fetch(url, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", 'X-CSRFToken': csrftoken },
+        })
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
+              removeCartItemUI(itemId);
+              showNotification("Elemento del carrito eliminado correctamente.", true, data.total_price);
+            } else {
+              showNotification("Error al eliminar el elemento del carrito.", false);
+            }
+          })
+          .catch(error => {
+            showNotification("Error de red al eliminar el elemento del carrito.", false);
+          });
+      }
+
+      function updateCartItemUI(itemId, newQuantity, newSubtotal) {
+        const quantityElement = document.getElementById(`quantity-${itemId}`);
+        const subtotalElement = document.getElementById(`subtotal-${itemId}`);
+
+        if (quantityElement && subtotalElement) {
+          quantityElement.textContent = newQuantity;
+          subtotalElement.textContent = `$${newSubtotal.toFixed()}`;
+        }
+      }
+
+      function removeCartItemUI(itemId) {
+        const cartItemElement = document.getElementById(`cart-item-${itemId}`);
+
+        if (cartItemElement) {
+          cartItemElement.style.display = "none";
+          cartItemElement.remove();
+        }
+      }
+
+      function updateCartTotal(newTotal) {
+        const totalElement = document.querySelector(".cart-payment-section h3");
+        if (totalElement) {
+          totalElement.textContent = `Total: $${newTotal.toFixed()}`;
+        }
+      }
+
+      function showNotification(message, isSuccess, newTotal = null) {
+        const notificationElement = document.getElementById("notification");
+        notificationElement.textContent = message;
+        notificationElement.classList.toggle("success", isSuccess);
+        notificationElement.classList.toggle("error", !isSuccess);
+        notificationElement.style.display = "block";
+
+        if (newTotal !== null) {
+          updateCartTotal(newTotal);
+        }
+
+        setTimeout(() => {
+          notificationElement.textContent = "";
+          notificationElement.classList.remove("success", "error");
+          notificationElement.style.display = "none";
+        }, 3000);
+      } 
+    </script>
+
+
+
+</body>
+{% endblock content %}

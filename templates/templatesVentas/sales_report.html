@@ -1,0 +1,96 @@
+{% extends 'templatesVentas/venta.html' %}
+
+{% block content %}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<div class="venta-detalle-container mt-5">
+    <h2 class="mb-4 text-center">Reporte de Ventas</h2>
+    <p><strong>Total de Ventas:</strong> <span id="total_sales">${{ total_sales }}</span></p>
+
+    <form id="sales_report_form" method="get" action="{% url 'sales_report' %}">
+        <div class="form-group">
+            <label for="start_date">Fecha de inicio:</label>
+            <input type="date" id="start_date" class="form-control" name="start_date">
+        </div>
+
+        <div class="form-group">
+            <label for="end_date">Fecha de fin:</label>
+            <input type="date" id="end_date" class="form-control" name="end_date">
+        </div>
+
+        <button type="submit" class="btn btn-primary">Generar Reporte</button>
+    </form>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <canvas id="salesChart"></canvas>
+
+    <!-- Inserta los datos de las ventas diarias en el código JavaScript -->
+    {{ dates|json_script:"dates" }}
+    {{ totals|json_script:"totals" }}
+
+    <script>
+        // Se obtienen los datos de las ventas diarias del contexto de la vista
+        var dates = JSON.parse(document.getElementById('dates').textContent);
+        var totals = JSON.parse(document.getElementById('totals').textContent);
+
+        // Obtener el contexto del canvas
+        var ctx = document.getElementById('salesChart').getContext('2d');
+
+        // Crear un degradado de color para la línea
+        var gradient = ctx.createLinearGradient(0, 0, 0, 400);
+        gradient.addColorStop(0, 'rgba(75,192,192,1)');
+        gradient.addColorStop(1, 'rgba(75,192,192,0)');
+
+        // Crear el gráfico
+        var salesChart = new Chart(ctx, {
+            type: 'line',  
+            data: {
+                labels: dates,
+                datasets: [{
+                    label: 'Ventas diarias',
+                    data: totals,
+                    fill: true,
+                    backgroundColor: gradient,
+                    borderColor: 'rgb(75,192,192)',
+                    pointBackgroundColor: 'rgb(75,192,192)',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: 'rgb(75,192,192)',
+                    tension: 0.3,  // Hace más suave la línea
+                }]
+            },
+            options: {
+                plugins: {
+                    tooltip: {
+                        enabled: true,
+                        mode: 'nearest',
+                        callbacks: {
+                            label: function(tooltipItem) {
+                                return 'Ventas: $' + tooltipItem.raw;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                },
+                animation: {
+                    tension: {
+                        duration: 2000,
+                        easing: 'easeInBounce',  // Animación con efecto rebote
+                        from: 0.3,
+                        to: 0,
+                        loop: true
+                    }
+                }
+            }
+        });
+    </script>
+
+</div>
+
+{% endblock content %}
